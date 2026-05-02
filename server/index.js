@@ -28,15 +28,9 @@ app.use(helmet({
 app.use(morgan('dev'));
 
 // ── CORS ──────────────────────────────────────────────────────
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5000',
-  'http://localhost:3000',
-];
+// Allow all origins — frontend & backend are served from same Express server
 app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error('Not allowed by CORS'));
-  },
+  origin: true,       // reflect request origin (allows any origin)
   credentials: true,
 }));
 
