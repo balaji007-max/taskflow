@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TaskFlow – Team Task Manager</title>
-  <meta name="description" content="Manage projects, assign tasks, and track progress with your team using TaskFlow." />
+  <title>TaskFlow | Project & Task Management</title>
+  <meta name="description" content="TaskFlow helps your team stay organized. Create projects, assign tasks, and track progress in one place." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -26,7 +26,7 @@
       <span class="logo-icon">⚡</span>
       <span class="logo-text">TaskFlow</span>
     </div>
-    <p class="auth-tagline">Ship projects. Together.</p>
+    <p class="auth-tagline">Stay organized. Get things done.</p>
 
     <!-- Tab switcher -->
     <div class="auth-tabs">
@@ -38,7 +38,7 @@
     <form id="login-form" class="auth-form">
       <div class="field-group">
         <label>Email</label>
-        <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email" />
+        <input type="email" id="login-email" placeholder="Enter your email" required autocomplete="email" />
       </div>
       <div class="field-group">
         <label>Password</label>
@@ -49,22 +49,22 @@
         <span class="btn-text">Sign In</span>
         <span class="btn-loader hidden"></span>
       </button>
-      <p class="auth-hint">Demo Admin: <b>admin@demo.com</b> / <b>admin123</b></p>
+
     </form>
 
     <!-- Signup Form -->
     <form id="signup-form" class="auth-form hidden">
       <div class="field-group">
         <label>Full Name</label>
-        <input type="text" id="signup-name" placeholder="Jane Smith" required autocomplete="name" />
+        <input type="text" id="signup-name" placeholder="Your full name" required autocomplete="name" />
       </div>
       <div class="field-group">
         <label>Email</label>
-        <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email" />
+        <input type="email" id="signup-email" placeholder="Enter your email" required autocomplete="email" />
       </div>
       <div class="field-group">
         <label>Password</label>
-        <input type="password" id="signup-password" placeholder="Min 6 characters" required autocomplete="new-password" />
+        <input type="password" id="signup-password" placeholder="Choose a password" required autocomplete="new-password" />
       </div>
       <div class="field-group">
         <label>Role</label>
@@ -190,7 +190,7 @@
 
           <div class="card">
             <div class="card-header">
-              <h2>⚠️ Overdue</h2>
+              <h2>Overdue Tasks</h2>
             </div>
             <div id="dash-overdue" class="task-list-mini"></div>
           </div>
@@ -333,11 +333,11 @@
       <input type="hidden" id="project-id" />
       <div class="field-group">
         <label>Project Name *</label>
-        <input type="text" id="project-name" placeholder="My Awesome Project" required />
+        <input type="text" id="project-name" placeholder="e.g. Website Redesign" required />
       </div>
       <div class="field-group">
         <label>Description</label>
-        <textarea id="project-desc" rows="3" placeholder="What is this project about?"></textarea>
+        <textarea id="project-desc" rows="3" placeholder="Brief description of the project"></textarea>
       </div>
       <div class="form-row">
         <div class="field-group">
@@ -368,11 +368,11 @@
       <input type="hidden" id="task-id" />
       <div class="field-group">
         <label>Task Title *</label>
-        <input type="text" id="task-title" placeholder="Implement authentication…" required />
+        <input type="text" id="task-title" placeholder="What needs to be done?" required />
       </div>
       <div class="field-group">
         <label>Description</label>
-        <textarea id="task-desc" rows="3" placeholder="Details about this task…"></textarea>
+        <textarea id="task-desc" rows="3" placeholder="Add more details here"></textarea>
       </div>
       <div class="form-row">
         <div class="field-group">
@@ -432,7 +432,7 @@
         <h4>Comments</h4>
         <div id="comments-list" class="comments-list"></div>
         <form id="form-comment" class="comment-form">
-          <input type="text" id="comment-input" placeholder="Add a comment…" />
+          <input type="text" id="comment-input" placeholder="Write a comment" />
           <button type="submit" class="btn-primary btn-sm">Post</button>
         </form>
       </div>
@@ -449,7 +449,7 @@
     </div>
     <div class="field-group">
       <label>Search User</label>
-      <input type="text" id="member-search" placeholder="Search by name or email…" />
+      <input type="text" id="member-search" placeholder="Type a name or email" />
       <div id="member-search-results" class="search-results"></div>
     </div>
     <div class="field-group">

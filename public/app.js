@@ -229,7 +229,7 @@ async function loadDashboard() {
               <span style="font-size:11px;color:var(--muted)">${t.project_name}</span>
             </div>
           </div>`).join('')
-      : '<div class="empty-state">🎉 No pending tasks!</div>';
+      : '<div class="empty-state">You have no pending tasks.</div>';
 
     // Overdue
     const odEl = $('dash-overdue');
@@ -243,7 +243,7 @@ async function loadDashboard() {
               <span>${t.project_name}</span>
             </div>
           </div>`).join('')
-      : '<div class="empty-state">✅ No overdue tasks!</div>';
+      : '<div class="empty-state">All tasks are on track.</div>';
 
     // Recent projects
     const rpEl = $('dash-projects');
@@ -253,7 +253,7 @@ async function loadDashboard() {
             <div class="project-mini-name">${p.name}</div>
             <div class="project-mini-stats">${p.task_count} tasks · ${p.done_count} done</div>
           </div>`).join('')
-      : '<div class="empty-state">No projects yet</div>';
+      : '<div class="empty-state">No projects to show.</div>';
 
     // Activity
     const actEl = $('dash-activity');
@@ -266,7 +266,7 @@ async function loadDashboard() {
               <div class="activity-time">${timeAgo(a.created_at)}</div>
             </div>
           </div>`).join('')
-      : '<div class="empty-state">No activity yet</div>';
+      : '<div class="empty-state">No recent activity.</div>';
 
     // Status chart
     const total = data.statusBreakdown.reduce((s, r) => s + Number(r.cnt), 0) || 1;
@@ -298,7 +298,7 @@ async function loadProjects() {
 
 function renderProjects(projects) {
   const grid = $('projects-grid');
-  if (!projects.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:40px">No projects found. Create your first project!</div>'; return; }
+  if (!projects.length) { grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:40px">No projects found. Create one to get started.</div>'; return; }
   grid.innerHTML = projects.map(p => {
     const done = Number(p.done_count || 0);
     const total = Number(p.task_count || 0);
@@ -390,7 +390,7 @@ function renderMyTasks() {
   if (priority) tasks = tasks.filter(t => t.priority === priority);
 
   const el = $('my-tasks-list');
-  if (!tasks.length) { el.innerHTML = '<div class="empty-state" style="padding:40px">No tasks found.</div>'; return; }
+  if (!tasks.length) { el.innerHTML = '<div class="empty-state" style="padding:40px">No tasks match your filters.</div>'; return; }
   el.innerHTML = tasks.map(t => `
     <div class="task-row" onclick="openTaskDetail('${t.id}','${t.project_id}')">
       <div style="font-size:18px">${t.assignee_avatar || '📋'}</div>
@@ -474,7 +474,7 @@ function taskCardHTML(t) {
 
 function renderMembers(members, canManage) {
   const el = $('project-members-list');
-  if (!members.length) { el.innerHTML = '<div class="empty-state">No members yet</div>'; return; }
+  if (!members.length) { el.innerHTML = '<div class="empty-state">No members added yet.</div>'; return; }
   el.innerHTML = members.map(m => `
     <div class="member-row">
       <div class="member-avatar">${m.avatar || '👤'}</div>
@@ -570,7 +570,7 @@ async function openTaskDetail(taskId, projectId) {
               <div class="comment-time">${timeAgo(c.created_at)}</div>
             </div>
           </div>`).join('')
-      : '<div class="empty-state" style="padding:12px">No comments yet. Be the first!</div>';
+      : '<div class="empty-state" style="padding:12px">No comments yet.</div>';
 
     openModal('modal-task-detail');
   } catch (err) { toast(err.message, 'error'); }
@@ -689,7 +689,7 @@ async function loadUsers() {
   try {
     const data = await req('GET', '/users');
     const el = $('users-list');
-    if (!data.users.length) { el.innerHTML = '<div class="empty-state" style="padding:40px">No users found</div>'; return; }
+    if (!data.users.length) { el.innerHTML = '<div class="empty-state" style="padding:40px">No users registered yet.</div>'; return; }
     el.innerHTML = data.users.map(u => `
       <div class="user-row">
         <div class="user-row-avatar">${u.avatar || '👤'}</div>
