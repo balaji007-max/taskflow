@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow – Team Task Manager</title>
+  <meta name="description" content="Manage projects, assign tasks, and track progress with your team using TaskFlow." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     AUTH PAGES  (login / signup)
+══════════════════════════════════════════════════ -->
+<div id="auth-section" class="auth-section hidden">
+  <div class="auth-bg">
+    <div class="auth-blob b1"></div>
+    <div class="auth-blob b2"></div>
+    <div class="auth-blob b3"></div>
+  </div>
+
+  <div class="auth-card glass">
+    <div class="auth-logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">TaskFlow</span>
+    </div>
+    <p class="auth-tagline">Ship projects. Together.</p>
+
+    <!-- Tab switcher -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login" id="tab-login">Login</button>
+      <button class="auth-tab" data-tab="signup" id="tab-signup">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="auth-form">
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <div id="login-error" class="form-error hidden"></div>
+      <button type="submit" class="btn-primary btn-full" id="login-btn">
+        <span class="btn-text">Sign In</span>
+        <span class="btn-loader hidden"></span>
+      </button>
+      <p class="auth-hint">Demo Admin: <b>admin@demo.com</b> / <b>admin123</b></p>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signup-form" class="auth-form hidden">
+      <div class="field-group">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Jane Smith" required autocomplete="name" />
+      </div>
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Min 6 characters" required autocomplete="new-password" />
+      </div>
+      <div class="field-group">
+        <label>Role</label>
+        <select id="signup-role">
+          <option value="member">Member</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div id="signup-error" class="form-error hidden"></div>
+      <button type="submit" class="btn-primary btn-full" id="signup-btn">
+        <span class="btn-text">Create Account</span>
+        <span class="btn-loader hidden"></span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════════════ -->
+<div id="app-shell" class="app-shell hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">TaskFlow</span>
+      </div>
+      <button class="sidebar-close" id="sidebar-close">✕</button>
+    </div>
+
+    <div class="user-card">
+      <div class="user-avatar" id="sidebar-avatar">🦊</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-name">User</div>
+        <div class="user-role badge" id="sidebar-role">member</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-page="dashboard" id="nav-dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a class="nav-item" data-page="projects" id="nav-projects">
+        <span class="nav-icon">📁</span> Projects
+      </a>
+      <a class="nav-item" data-page="my-tasks" id="nav-my-tasks">
+        <span class="nav-icon">✅</span> My Tasks
+      </a>
+      <a class="nav-item admin-only hidden" data-page="users" id="nav-users">
+        <span class="nav-icon">👥</span> Users
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-ghost btn-full" id="logout-btn">
+        <span>🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrap">
+    <!-- Top bar -->
+    <header class="topbar">
+      <button class="hamburger" id="hamburger">☰</button>
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="topbar-avatar" id="topbar-avatar">🦊</div>
+      </div>
+    </header>
+
+    <!-- PAGES -->
+    <main class="main-content">
+
+      <!-- ─ DASHBOARD ─ -->
+      <section id="page-dashboard" class="page active">
+        <div class="page-header">
+          <h1>Dashboard</h1>
+          <p class="page-sub" id="dash-greeting">Welcome back!</p>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card" style="--accent:#6366f1">
+            <div class="stat-icon">📁</div>
+            <div class="stat-body">
+              <div class="stat-value" id="stat-projects">–</div>
+              <div class="stat-label">Active Projects</div>
+            </div>
+          </div>
+          <div class="stat-card" style="--accent:#22d3ee">
+            <div class="stat-icon">📋</div>
+            <div class="stat-body">
+              <div class="stat-value" id="stat-tasks">–</div>
+              <div class="stat-label">Total Tasks</div>
+            </div>
+          </div>
+          <div class="stat-card" style="--accent:#f59e0b">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-body">
+              <div class="stat-value" id="stat-overdue">–</div>
+              <div class="stat-label">Overdue</div>
+            </div>
+          </div>
+          <div class="stat-card" style="--accent:#10b981">
+            <div class="stat-icon">✅</div>
+            <div class="stat-body">
+              <div class="stat-value" id="stat-completed">–</div>
+              <div class="stat-label">Completed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-header">
+              <h2>My Tasks</h2>
+              <a class="link-btn" data-page="my-tasks">View all →</a>
+            </div>
+            <div id="dash-my-tasks" class="task-list-mini"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>⚠️ Overdue</h2>
+            </div>
+            <div id="dash-overdue" class="task-list-mini"></div>
+          </div>
+
+          <div class="card full-width">
+            <div class="card-header">
+              <h2>Recent Projects</h2>
+              <a class="link-btn" data-page="projects">View all →</a>
+            </div>
+            <div id="dash-projects" class="projects-mini-grid"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2>Activity Feed</h2></div>
+            <div id="dash-activity" class="activity-feed"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2>Task Status</h2></div>
+            <div id="dash-status-chart" class="status-chart"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─ PROJECTS ─ -->
+      <section id="page-projects" class="page hidden">
+        <div class="page-header">
+          <h1>Projects</h1>
+          <button class="btn-primary admin-only hidden" id="btn-new-project">+ New Project</button>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="project-search" placeholder="🔍  Search projects…" />
+        </div>
+        <div id="projects-grid" class="projects-grid"></div>
+      </section>
+
+      <!-- ─ PROJECT DETAIL ─ -->
+      <section id="page-project-detail" class="page hidden">
+        <div class="page-header">
+          <button class="btn-back" id="back-to-projects">← Projects</button>
+          <div class="project-header-info">
+            <h1 id="detail-project-name">Project</h1>
+            <span class="badge" id="detail-project-status">active</span>
+          </div>
+          <button class="btn-primary" id="btn-new-task">+ New Task</button>
+        </div>
+
+        <div class="project-meta" id="project-meta-bar"></div>
+
+        <!-- Kanban board -->
+        <div class="kanban-board" id="kanban-board">
+          <div class="kanban-col" data-status="todo">
+            <div class="kanban-col-header">
+              <span class="col-dot todo-dot"></span> Todo
+              <span class="col-count" id="count-todo">0</span>
+            </div>
+            <div class="kanban-cards" id="col-todo"></div>
+          </div>
+          <div class="kanban-col" data-status="in_progress">
+            <div class="kanban-col-header">
+              <span class="col-dot inprog-dot"></span> In Progress
+              <span class="col-count" id="count-in_progress">0</span>
+            </div>
+            <div class="kanban-cards" id="col-in_progress"></div>
+          </div>
+          <div class="kanban-col" data-status="review">
+            <div class="kanban-col-header">
+              <span class="col-dot review-dot"></span> Review
+              <span class="col-count" id="count-review">0</span>
+            </div>
+            <div class="kanban-cards" id="col-review"></div>
+          </div>
+          <div class="kanban-col" data-status="done">
+            <div class="kanban-col-header">
+              <span class="col-dot done-dot"></span> Done
+              <span class="col-count" id="count-done">0</span>
+            </div>
+            <div class="kanban-cards" id="col-done"></div>
+          </div>
+        </div>
+
+        <!-- Members section -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h2>Team Members</h2>
+            <button class="btn-sm admin-only hidden" id="btn-add-member">+ Add Member</button>
+          </div>
+          <div id="project-members-list" class="members-list"></div>
+        </div>
+      </section>
+
+      <!-- ─ MY TASKS ─ -->
+      <section id="page-my-tasks" class="page hidden">
+        <div class="page-header">
+          <h1>My Tasks</h1>
+        </div>
+        <div class="filter-bar">
+          <select id="mytask-status-filter">
+            <option value="">All Status</option>
+            <option value="todo">Todo</option>
+            <option value="in_progress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+          <select id="mytask-priority-filter">
+            <option value="">All Priority</option>
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div id="my-tasks-list" class="tasks-table-wrap"></div>
+      </section>
+
+      <!-- ─ USERS (admin) ─ -->
+      <section id="page-users" class="page hidden">
+        <div class="page-header">
+          <h1>User Management</h1>
+        </div>
+        <div id="users-list" class="users-table-wrap"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════ -->
+
+<!-- New / Edit Project Modal -->
+<div id="modal-project" class="modal-overlay hidden">
+  <div class="modal glass">
+    <div class="modal-header">
+      <h3 id="modal-project-title">New Project</h3>
+      <button class="modal-close" data-modal="modal-project">✕</button>
+    </div>
+    <form id="form-project">
+      <input type="hidden" id="project-id" />
+      <div class="field-group">
+        <label>Project Name *</label>
+        <input type="text" id="project-name" placeholder="My Awesome Project" required />
+      </div>
+      <div class="field-group">
+        <label>Description</label>
+        <textarea id="project-desc" rows="3" placeholder="What is this project about?"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label>Deadline</label>
+          <input type="date" id="project-deadline" />
+        </div>
+        <div class="field-group">
+          <label>Color</label>
+          <input type="color" id="project-color" value="#6366f1" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" data-modal="modal-project">Cancel</button>
+        <button type="submit" class="btn-primary" id="btn-save-project">Create Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- New / Edit Task Modal -->
+<div id="modal-task" class="modal-overlay hidden">
+  <div class="modal glass">
+    <div class="modal-header">
+      <h3 id="modal-task-title">New Task</h3>
+      <button class="modal-close" data-modal="modal-task">✕</button>
+    </div>
+    <form id="form-task">
+      <input type="hidden" id="task-id" />
+      <div class="field-group">
+        <label>Task Title *</label>
+        <input type="text" id="task-title" placeholder="Implement authentication…" required />
+      </div>
+      <div class="field-group">
+        <label>Description</label>
+        <textarea id="task-desc" rows="3" placeholder="Details about this task…"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label>Status</label>
+          <select id="task-status">
+            <option value="todo">Todo</option>
+            <option value="in_progress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Priority</label>
+          <select id="task-priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label>Assign To</label>
+          <select id="task-assignee">
+            <option value="">Unassigned</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Due Date</label>
+          <input type="date" id="task-due-date" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" data-modal="modal-task">Cancel</button>
+        <button type="submit" class="btn-primary" id="btn-save-task">Create Task</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Task Detail / Comments Modal -->
+<div id="modal-task-detail" class="modal-overlay hidden">
+  <div class="modal modal-lg glass">
+    <div class="modal-header">
+      <h3 id="detail-task-title">Task</h3>
+      <div class="modal-header-actions">
+        <button class="btn-sm btn-warning" id="btn-edit-task-detail">Edit</button>
+        <button class="btn-sm btn-danger" id="btn-delete-task-detail">Delete</button>
+        <button class="modal-close" data-modal="modal-task-detail">✕</button>
+      </div>
+    </div>
+    <div class="task-detail-body">
+      <div class="task-detail-meta" id="task-detail-meta"></div>
+      <p class="task-detail-desc" id="task-detail-desc"></p>
+      <div class="comments-section">
+        <h4>Comments</h4>
+        <div id="comments-list" class="comments-list"></div>
+        <form id="form-comment" class="comment-form">
+          <input type="text" id="comment-input" placeholder="Add a comment…" />
+          <button type="submit" class="btn-primary btn-sm">Post</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Member Modal -->
+<div id="modal-add-member" class="modal-overlay hidden">
+  <div class="modal modal-sm glass">
+    <div class="modal-header">
+      <h3>Add Team Member</h3>
+      <button class="modal-close" data-modal="modal-add-member">✕</button>
+    </div>
+    <div class="field-group">
+      <label>Search User</label>
+      <input type="text" id="member-search" placeholder="Search by name or email…" />
+      <div id="member-search-results" class="search-results"></div>
+    </div>
+    <div class="field-group">
+      <label>Role in Project</label>
+      <select id="member-role">
+        <option value="member">Member</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <input type="hidden" id="member-user-id" />
+    <div class="modal-actions">
+      <button class="btn-ghost" data-modal="modal-add-member">Cancel</button>
+      <button class="btn-primary" id="btn-confirm-add-member">Add Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notifications -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
