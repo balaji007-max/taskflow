@@ -29,12 +29,17 @@ app.use(morgan('dev'));
 
 // ── CORS ──────────────────────────────────────────────────────
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5000',
+  process.env.FRONTEND_URL,
+  'https://task-team-manager-production-c716.up.railway.app',
   'http://localhost:3000',
-];
+  'http://localhost:5000',
+].filter(Boolean);   // drop any undefined/empty values
+
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    // Allow requests with no origin header (e.g. mobile apps, curl, server-to-server)
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
     cb(new Error('Not allowed by CORS'));
   },
   credentials: true,
