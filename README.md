@@ -1,63 +1,50 @@
-# TaskFlow
+# Assignment: Team Task Manager (Full-Stack)
 
-A team task management web app I built for managing projects and tracking tasks across teams. It has role-based access so admins and members have different levels of control.
+**App Name:** TaskFlow  
+**Live Deployment:** https://team-task-manager-balaji.up.railway.app
 
-## What it does
+This repository contains my submission for the Full-Stack Team Task Manager assignment. It is a complete web application built to allow users to create projects, assign tasks, and track progress with strict role-based access control.
 
-- Sign up / login with JWT authentication
-- Create projects and add team members
-- Assign tasks with priorities and due dates
-- Kanban board to move tasks across stages (Todo → In Progress → Review → Done)
-- Dashboard showing your tasks, overdue items, and recent activity
-- Admins can manage users and control who has access to what
+## 🚀 Key Features Implemented
 
-## Tech used
+- **Authentication:** Secure signup and login flow using JWT (JSON Web Tokens) and bcrypt password hashing.
+- **Project & Team Management:** Users can create new projects and add team members.
+- **Task Tracking:** Ability to create tasks, assign them to specific members, set priorities, and update status via a Kanban-style board (Todo → In Progress → Review → Done).
+- **Interactive Dashboard:** A main dashboard that displays task statistics, overdue warnings, and a status breakdown.
 
-- **Backend** – Node.js, Express
-- **Database** – MySQL
-- **Auth** – JWT + bcrypt
-- **Frontend** – Vanilla HTML, CSS, JavaScript (no frameworks)
-- **Deployed on** – Railway
+## ⚙️ Requirements Fulfilled
 
-## Running it locally
+- **REST APIs + Database:** Built a robust Node.js/Express backend exposing RESTful APIs. Data is stored in a relational **MySQL** database.
+- **Validations & Relationships:** 
+  - Backend validation using `express-validator`.
+  - Database schema includes proper primary/foreign key relationships (Users ↔ Projects ↔ Tasks).
+- **Role-Based Access Control:** 
+  - Two distinct roles: **Admin** and **Member**.
+  - Admins can manage projects and team members. Members can only view their projects and update assigned tasks.
 
-Clone the repo and install dependencies:
+## 🌐 Deployment (Mandatory)
 
-```
-npm install
-```
+The application is deployed, live, and fully functional using **Railway**.
 
-Set up your `.env` file:
+- **Frontend & Backend:** Hosted as a Node.js web service on Railway.
+- **Database:** Uses a provisioned Railway MySQL database.
 
-```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=task_team_manager
-JWT_SECRET=any_secret_key
-```
+---
 
-Create the database tables:
+### Running the Project Locally
 
-```
-node server/database/setup.js
-```
+If you wish to test the code locally:
 
-Start the server:
-
-```
-npm start
-```
-
-Then open `http://localhost:5000` in your browser.
-
-## Roles
-
-There are two roles — **Admin** and **Member**.
-
-Admins can create projects, manage members, assign tasks to anyone, and delete things. Members can view their assigned projects, create tasks, update task status, and leave comments.
-
-## Live demo
-
-https://team-task-manager-balaji.up.railway.app
+1. Clone the repository and run `npm install`.
+2. Create a `.env` file with your local MySQL credentials:
+   ```env
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=your_password
+   DB_NAME=task_team_manager
+   JWT_SECRET=super_secret_key
+   ```
+3. Initialize the database schema by running `node server/database/setup.js`.
+4. Start the server with `npm start`.
+5. Open `http://localhost:5000` in your browser.
